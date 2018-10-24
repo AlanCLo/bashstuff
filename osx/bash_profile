@@ -1,0 +1,22 @@
+export EDITOR=vim
+
+alias ls="ls -G"
+alias x="exit"
+alias PythonHTTP="python -m SimpleHTTPServer"
+alias gping="ping www.google.com"
+alias PythonJSON="python -m json.tool"
+
+
+superGrep() {
+    if [ -z "$1" ]; then
+        echo "Usage: superGrep (pattern) [file pattern]"
+        return
+    fi
+    if [ -z "$2" ]; then
+        FILE_PATTERN=""
+    else
+        FILE_PATTERN="-name $2"
+    fi
+    find . $FILE_PATTERN -type f -exec grep "$1" "{}" /dev/null \; | grep -v "^Binary file"
+}
+
