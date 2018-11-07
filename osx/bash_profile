@@ -1,15 +1,30 @@
+###
+# Exports
+###
 export EDITOR=vim
+export PATH=/opt/local/bin:/opt/local/sbin:$PATH
 
+###
+# Aliases
+###
 alias ls="ls -G"
+alias ll="ls -G -l"
+alias la="ls -G -la"
+alias env="env | sort -n"
 alias x="exit"
-alias PythonHTTP="python -m SimpleHTTPServer"
 alias gping="ping www.google.com"
+
+alias PythonHTTP="python -m SimpleHTTPServer"
 alias PythonJSON="python -m json.tool"
 
-
+###
+# Functions
+###
 superGrep() {
     if [ -z "$1" ]; then
         echo "Usage: superGrep (pattern) [file pattern]"
+        echo "   pattern: A grep pattern"
+        echo "   file pattern (optional): only grep files with this pattern"
         return
     fi
     if [ -z "$2" ]; then
@@ -19,4 +34,53 @@ superGrep() {
     fi
     find . $FILE_PATTERN -type f -exec grep "$1" "{}" /dev/null \; | grep -v "^Binary file"
 }
+
+tcpDump() {
+    if [ -z "$1" ]; then
+        echo "Usage: tcpDump (dump file) [BSDName]"
+        echo "   dump file: path to file for storing dump"
+        echo "   BSDName (optional): device name according to ifconfig/System Information. Default 'en0'"
+        echo ""
+        echo "You can view contents of the file with:"
+        echo "   tcpdump -s 0 -n -e -x -vvv -r (dump file)"
+        echo ""
+        return
+    fi
+    file=$1
+    if [ -z "$2" ]; then
+        device="en0"
+    else
+        device=$2
+    fi
+    echo -e "About to run: \033[01;32msudo\033[0m" tcpdump -i "$device" -s 0 -B 524288 -w "$file"
+    echo ""
+    echo "Once tcpdump listening begins, execute network function you want to monitor"
+    echo -e "To view dump, use: \033[01;32mtcpdump -s 0 -n -e -x -vvv -r $file\033[0m"
+    echo ""
+    echo "Remember to Ctrl-c, to stop listening"
+    echo ""
+    sudo tcpdump -i "$device" -s 0 -B 524288 -w "$file"
+}
+
+BashLogHistory() {
+    if [ -z "$1" ]; then
+        HISTORY_FILE="~/history.txt"
+    else
+        HISTORY_FILE="$1"
+    fi
+    echo "Recording shell history to $HISTORY_FILE"
+    HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S \$\$\$ "
+    PROMPT_COMMAND="history 1 >> $HISTORY_FILE"
+}
+
+
+# Source local variables for env, PATH...etc
+if [ -f ~/.bash_local ]; then
+    source ~/.bash_local
+fi
+
+# Select a random terminal theme. chcolor.sh needs to be in PATH set by .bash_local
+if which chcolor.sh 2>&1 > /dev/null; then
+    chcolor.sh
+fi
 
