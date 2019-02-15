@@ -75,7 +75,7 @@ BashLogHistory() {
 
 
 EstablishedTCP_Ports() {
-    netstat -p tcp | grep ESTABLISHED | sed 's/ [ ]*/ /g' | cut -f 4 -d ' ' | rev | cut -f 1 -d . | rev | sort -n | uniq
+    netstat -a -p tcp | grep -e ESTABLISHED -e LISTEN | sed 's/ [ ]*/ /g' | cut -f 4 -d ' ' | rev | cut -f 1 -d . | rev | sort -n | uniq
 }
 EstablishedTCP_ProcessesByPort() {
     ports=`EstablishedTCP_Ports`
