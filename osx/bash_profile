@@ -74,6 +74,26 @@ BashLogHistory() {
 }
 
 
+EstablishedTCP_Ports() {
+    netstat -a -p tcp | grep -e ESTABLISHED -e LISTEN | sed 's/ [ ]*/ /g' | cut -f 4 -d ' ' | rev | cut -f 1 -d . | rev | sort -n | uniq
+}
+EstablishedTCP_ProcessesByPort() {
+    ports=`EstablishedTCP_Ports`
+    for x in $ports; do
+        echo "Port $x"
+        pid=`lsof -t -i ":$x"`
+        for y in $pid; do
+            ps -e -o pid= -o user= -o command= $y
+        done
+    done
+}
+EstablishedTCP_UniqProcesses() {
+    ports=`EstablishedTCP_Ports`
+    pid=`for x in $ports; do lsof -t -i ":$x"; done | sort -n | uniq`
+    for x in $pid; do ps -e -o pid= -o user= -o command= $x; done
+}
+
+
 # Source local variables for env, PATH...etc
 if [ -f ~/.bash_local ]; then
     source ~/.bash_local
