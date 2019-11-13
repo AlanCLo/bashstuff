@@ -14,7 +14,7 @@ alias env="env | sort -n"
 alias x="exit"
 alias gping="ping www.google.com"
 
-alias PythonHTTP="python -m SimpleHTTPServer"
+alias PythonHTTP="python3 -m http.server"
 alias PythonJSON="python -m json.tool"
 
 ###
