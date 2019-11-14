@@ -32,7 +32,7 @@ superGrep() {
     else
         FILE_PATTERN="-name $2"
     fi
-    find . $FILE_PATTERN -type f -exec grep "$1" "{}" /dev/null \; | grep -v "^Binary file"
+    find . "$FILE_PATTERN" -type f -exec grep "$1" "{}" /dev/null \; | grep -v "^Binary file"
 }
 
 tcpDump() {
@@ -64,7 +64,7 @@ tcpDump() {
 
 BashLogHistory() {
     if [ -z "$1" ]; then
-        HISTORY_FILE="~/history.txt"
+        HISTORY_FILE="$HOME/history.txt"
     else
         HISTORY_FILE="$1"
     fi
@@ -78,29 +78,29 @@ EstablishedTCP_Ports() {
     netstat -a -p tcp | grep -e ESTABLISHED -e LISTEN | sed 's/ [ ]*/ /g' | cut -f 4 -d ' ' | rev | cut -f 1 -d . | rev | sort -n | uniq
 }
 EstablishedTCP_ProcessesByPort() {
-    ports=`EstablishedTCP_Ports`
+    ports=$(EstablishedTCP_Ports)
     for x in $ports; do
         echo "Port $x"
-        pid=`lsof -t -i ":$x"`
+        pid=$(lsof -t -i ":$x")
         for y in $pid; do
-            ps -e -o pid= -o user= -o command= $y
+            ps -e -o pid= -o user= -o command= "$y"
         done
     done
 }
 EstablishedTCP_UniqProcesses() {
-    ports=`EstablishedTCP_Ports`
-    pid=`for x in $ports; do lsof -t -i ":$x"; done | sort -n | uniq`
-    for x in $pid; do ps -e -o pid= -o user= -o command= $x; done
+    ports=$(EstablishedTCP_Ports)
+    pid=$(for x in $ports; do lsof -t -i ":$x"; done | sort -n | uniq)
+    for x in $pid; do ps -e -o pid= -o user= -o command= "$x"; done
 }
 
 
 # Source local variables for env, PATH...etc
-if [ -f ~/.bash_local ]; then
-    source ~/.bash_local
+if [ -f "$HOME/.bash_local" ]; then
+    source "$HOME/.bash_local"
 fi
 
 # Select a random terminal theme. chcolor.sh needs to be in PATH set by .bash_local
-if which chcolor.sh 2>&1 > /dev/null; then
+if { which chcolor.sh > /dev/null } 2>&1; then
     chcolor.sh
 fi
 
