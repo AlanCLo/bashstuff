@@ -96,11 +96,12 @@ EstablishedTCP_UniqProcesses() {
 
 # Source local variables for env, PATH...etc
 if [ -f "$HOME/.bash_local" ]; then
+    #shellcheck source=/dev/null
     source "$HOME/.bash_local"
 fi
 
 # Select a random terminal theme. chcolor.sh needs to be in PATH set by .bash_local
-if { which chcolor.sh > /dev/null } 2>&1; then
+if command -v chcolor.sh > /dev/null 2>&1; then
     chcolor.sh
 fi
 
