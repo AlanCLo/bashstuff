@@ -13,6 +13,7 @@ alias la="ls -G -la"
 alias env="env | sort -n"
 alias x="exit"
 alias gping="ping www.google.com"
+alias u="ultralist"
 
 alias PythonHTTP="python3 -m http.server"
 alias PythonJSON="python -m json.tool"
