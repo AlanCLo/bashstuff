@@ -11,4 +11,5 @@ inoremap <S-Tab> <C-P>
 "Tab to spaces
 setlocal ts=4 sw=4 sts=0 expandtab
 autocmd Filetype make setlocal noexpandtab
+autocmd Filetype coffee setlocal noexpandtab
 autocmd Filetype yaml setlocal ts=2 sw=2 sts=0 expandtab
