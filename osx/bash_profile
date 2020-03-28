@@ -28,13 +28,20 @@ superGrep() {
         echo "   file pattern (optional): only grep files with this pattern"
         return
     fi
+    FILTERS="grep -v '^Binary file' | grep -v '.git'"
+
     if [ -z "$2" ]; then
-        FILE_PATTERN=""
+        find . -type f -exec grep "$1" "{}" /dev/null \; | bash -c "$FILTERS"
     else
-        FILE_PATTERN="-name $2"
+        # Test if wildcard is in pattern. Bash expands wildcards if matching files in pwd is found
+        if ! [[ $2 =~ '*' ]]; then
+            echo "   ERROR: No * wildcard found in pattern. Try using ''"
+            return
+        fi
+        find . -name "$2" -type f -exec grep "$1" "{}" /dev/null \; | bash -c "$FILTERS"
     fi
-    find . ${FILE_PATTERN} -type f -exec grep "$1" "{}" /dev/null \; | grep -v "^Binary file"
 }
+
 
 tcpDump() {
     if [ -z "$1" ]; then
