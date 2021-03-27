@@ -113,3 +113,9 @@ if command -v chcolor.sh > /dev/null 2>&1; then
     chcolor.sh
 fi
 
+
+# Setup docker env if I have docker-machine running
+if [ "$(docker-machine status)" == "Running" ]; then
+    eval $(docker-machine env)
+fi
+
